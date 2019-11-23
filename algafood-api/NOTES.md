@@ -36,3 +36,7 @@ Voce pode usar o @Configuration com @Bean ou o @Component para definir os seus B
 [Dependencia opcional com @Autowired]
 Quando anotamos com @Autowired(required = false) tornamos a injecao opcional. Caso exista um bean o Spring faz a injecao caso contrario, o valor fica null.
 Sem o required = false para deixar opcional o Spring da erro Not Found e nao inicializa a aplicacao
+
+[Ambiguidade de beans e injecao de lista de beans]
+Quando temos dois beans repetidos o Spring por si so nao sabe qual deve ser injetado. Exemplo e usando uma interface com duas ou mais implementacoes.
+Uma forma de resolver isso e usando uma lista List<Notificador> notificadores. O Spring vai pegar todas as implementacoes e injetar em uma lista
