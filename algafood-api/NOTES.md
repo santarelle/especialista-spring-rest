@@ -40,3 +40,10 @@ Sem o required = false para deixar opcional o Spring da erro Not Found e nao ini
 [Ambiguidade de beans e injecao de lista de beans]
 Quando temos dois beans repetidos o Spring por si so nao sabe qual deve ser injetado. Exemplo e usando uma interface com duas ou mais implementacoes.
 Uma forma de resolver isso e usando uma lista List<Notificador> notificadores. O Spring vai pegar todas as implementacoes e injetar em uma lista
+
+[Desambiguacao de beans com @Primary]
+Quando anotamos um Bean com @Primary o Spring vai usar este bean na hora de uma injecao ambigua
+
+[Desambiguacao de beans com @Qualifier]
+Quando anovamos um Bean com @Qualifier estamos dando um apilido para este beans e podemos usar este @Qualifier("nome") para identificar a injecao de beans em outra classe.
+
