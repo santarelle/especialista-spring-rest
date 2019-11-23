@@ -18,6 +18,12 @@ Beans sao gerenciados pelo container do spring
 
 @Component
 
+[Injetando dependencias (beans Spring)]
 O Spring instancia os beans na ordem de necessidade das injecoes. 
 Se o Notificador e passado no construtor de AtiviacaoClienteService 
 entao o Notificador sera instanciado primeiro
+
+[Usando @Configuration e @Bean para definir beans]
+@Configuration o objetivo e servidor como definicao de outros Beans
+Vantagens a gente pode configurar o bean da forma que quizermos
+Voce pode usar o @Configuration com @Bean ou o @Component para definir os seus Beans
