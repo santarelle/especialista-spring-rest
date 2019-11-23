@@ -9,6 +9,7 @@ import com.algaworks.algafood.di.notificacao.Notificador;
 @Component
 public class AtivacaoClienteService {
 
+	@Autowired
 	private Notificador notificador;
 
 //	@Autowired
@@ -27,10 +28,10 @@ public class AtivacaoClienteService {
 		notificador.notificar(cliente, "Seu cadastro no sistema esta ativo");
 	}
 
-	@Autowired
-	public void setNotificador(Notificador notificador) {
-		this.notificador = notificador;
-	}
+//	@Autowired
+//	public void setNotificador(Notificador notificador) {
+//		this.notificador = notificador;
+//	}
 	
 	
 }

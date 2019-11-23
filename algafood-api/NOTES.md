@@ -29,7 +29,7 @@ Vantagens a gente pode configurar o bean da forma que quizermos
 Voce pode usar o @Configuration com @Bean ou o @Component para definir os seus Beans
 
 [Conhecendo os pontos de injecao e a anotacao @Autowired]
-1. Voce pode injetar atraves do construtor. Se voce tiver mais que um construtor e precisar decidir qual deve ser usado, vc pode user o @Autowired
-2. Usado o metodo de setter com @Autowired vc tambem pode injetar beans
-
+1. Usando o construtor para injetar beans. Se voce tiver mais que um construtor e precisar decidir qual deve ser usado, vc pode user o @Autowired
+2. Usando o metodo de setter com @Autowired vc tambem pode injetar beans
+3. Usando o @Autowired diretamente na declaracao do atributo da classe
 
