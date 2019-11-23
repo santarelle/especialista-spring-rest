@@ -33,3 +33,6 @@ Voce pode usar o @Configuration com @Bean ou o @Component para definir os seus B
 2. Usando o metodo de setter com @Autowired vc tambem pode injetar beans
 3. Usando o @Autowired diretamente na declaracao do atributo da classe
 
+[Dependencia opcional com @Autowired]
+Quando anotamos com @Autowired(required = false) tornamos a injecao opcional. Caso exista um bean o Spring faz a injecao caso contrario, o valor fica null.
+Sem o required = false para deixar opcional o Spring da erro Not Found e nao inicializa a aplicacao
