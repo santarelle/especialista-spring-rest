@@ -4,6 +4,7 @@ public class Cliente {
 
 	private String nome;
 	private String email;
+	private boolean ativo;
 	
 	public String getNome() {
 		return nome;
@@ -16,6 +17,16 @@ public class Cliente {
 	}
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	public boolean isAtivo() {
+		return ativo;
+	}
+	public void setAtivo(boolean ativo) {
+		this.ativo = ativo;
+	}
+	
+	public void ativar() {
+		this.ativo = true;
 	}
 	
 }
