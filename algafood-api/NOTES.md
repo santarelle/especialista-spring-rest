@@ -45,5 +45,7 @@ Uma forma de resolver isso e usando uma lista List<Notificador> notificadores. O
 Quando anotamos um Bean com @Primary o Spring vai usar este bean na hora de uma injecao ambigua
 
 [Desambiguacao de beans com @Qualifier]
-Quando anovamos um Bean com @Qualifier estamos dando um apilido para este beans e podemos usar este @Qualifier("nome") para identificar a injecao de beans em outra classe.
+Quando anotamos um Bean com @Qualifier estamos dando um apilido para este beans e podemos usar este @Qualifier("nome") para identificar a injecao de beans em outra classe.
 
+[Desambiguacao de beans com anotacao customizada]
+E possivel resolver criando uma anotacao que e anotada com @Qualifier e um @Retention do tipo RUNTIME.
