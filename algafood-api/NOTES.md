@@ -27,3 +27,7 @@ entao o Notificador sera instanciado primeiro
 @Configuration o objetivo e servidor como definicao de outros Beans
 Vantagens a gente pode configurar o bean da forma que quizermos
 Voce pode usar o @Configuration com @Bean ou o @Component para definir os seus Beans
+
+[Conhecendo os pontos de injecao e a anotacao @Autowired]
+1. Voce pode injetar atraves do construtor
+2. Se voce tiver mais que um construtor e precisar decidir qual deve ser usado, vc pode user o @Autowired
