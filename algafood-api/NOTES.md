@@ -84,6 +84,17 @@ Podemos usar metodos de callback quando o bean mudar de estado com anotacoes:
 
 # Publicando e consumindo eventos customizados
 
-Injetando o bean ApplicationEventPublisher em uma classe e possivel enviar eventos usando o metodo `publishEvent`
+Ele utiliza o padrao Observer que emite e escuta eventos quando determinada acao acontece
 
-Usando a anotacao @EventListener em um metodo e possivel escutar um evento quando ele e disparado e fazer algo com ele 
+Injetando o bean `ApplicationEventPublisher` em uma classe e possivel enviar eventos usando o metodo `publishEvent`
+
+Usando a anotacao `@EventListener` em um metodo e possivel escutar um evento quando ele e disparado e fazer algo com ele 
+
+# Configurando projetos Spring Boot com o application.properties
+
+E definido como chave e valor. Podemos configurar novas propriedades como tambem substituir as propriedades que o spring boot ja fornece.
+
+Lista de propriedades comuns do proprio spring boot podem ser visualizadas pelo link abaixo:
+
+https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+
