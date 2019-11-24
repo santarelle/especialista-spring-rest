@@ -149,3 +149,51 @@ export SPRING_PROFILES_ACTIVE=prod
 java -jar target/algafood-api-0.0.1-SNAPSHOT.jar
 ```
 
+# O que é JPA e Hibernate?
+
+## O que e persistencia de dados ?
+
+E um termo utilizando para dizer que queremos preservar os dados da aplicacao. Normalmente usado um banco de dados.
+
+## Persitencia com banco de dados usando Java
+
+```
+Codigo Java -> Driver JDBC -> MySQL
+```
+
+Cada banco de dados tem pelo menos uma implementacao de JDBC que e o responsavel com comunicar a aplicacao com o banco de dados.
+
+Um link para um artigo sobre JPA: https://blog.algaworks.com/tutorial-jpa/
+
+Em Java, sem usar JPA vc usa o PreparedStatement, Statement, ResultSet isso leva muito tempo e tem grandes possibilidades de erros, pq vc tem que associar o resultado com os atributos de classe manualmente.
+
+## O que e ORM (Object Relational Mapping) ?
+
+E uma tecnica para mapeamento orientadas a objetos para uma tabela de banco de dados, de forma que o programador trabalha mais com orientacao a objetos e menos no banco de dados.
+
+## Mapeamento Objeto-Relacional
+| Modelo Relacional | Modelo OO
+| Tabela | Classe
+| Linha | Objeto
+| Coluna | Atributo
+| N/A | Metodo
+| Chave estrangeira (FK) | Associacao
+
+## Persistencia com ORM
+
+```
+Codigo Java -> ORM -> Driver JDBC -> MySQL
+```
+
+## JPA (Java Persistente API) ?
+
+JPA define a forma de ORM (Anotacoes)
+
+JPA e uma especificacao JEE
+
+## Hibernete ?
+
+E uma implementacao da especificacao JPA.
+
+Hibernete e a mais usada mas tem o EclipseLink.
+
