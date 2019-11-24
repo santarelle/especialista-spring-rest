@@ -127,3 +127,13 @@ Usado para agrupar propriedades do servidor em uma classe de configuracao.
 Voce define os atributos e gera os getters e setters juntamente com o anotacao de `@ConfigurationProperties`.
 
 Para usar voce injeta o beans em outra classe e usa as propriedades
+
+# Alterando a configuração do projeto dependendo do ambiente (com Spring Profiles)
+
+Usado para definir ambientes como Producao, Desenvolvimento, Testes entre outros.
+
+Criando arquivos `application-*.properties` voce pode definir varios profiles.
+
+Uma forma de usar e setando spring.profiles.active=prod no arquivo application.properites por exemplo.
+
+
