@@ -75,7 +75,11 @@ Ex: dev,h2,mailmock,filesystem
 O clico de vida do bean dentro do container tem as fases: inicializacao, usando o bean e destruicao do bean.
 
 Podemos usar metodos de callback quando o bean mudar de estado com anotacoes: 
+
 1.1. @PostConstruct - E executado apois o contrutor da classe
+
 1.2. @PreDestroy - E executado quando o bean vai ser destruido
+
 2. @Bean(initMethod = "init", destroyMethod = "destroy") - Usando essa anotacao e passando o nome dos metodos a serem executados como string.
+
 3. Implements InitializingBean, DisposableBean - Implementando essas interfaces vc nao precisa usar o PostConstruct e PreDestroy (nao e muito recomendado essa forma)
