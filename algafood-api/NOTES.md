@@ -112,3 +112,11 @@ Outra forma e usando variavel de ambiente:
 export SERVER_PORT=8083
 java -jar algafood-api.jar
 ```
+
+# Criando e acessando propriedades customizadas com @Value
+
+```
+@Value("${nome.da.propriedade}")
+private String nomeDaPropriedade;
+```
+
