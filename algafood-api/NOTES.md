@@ -98,3 +98,17 @@ Lista de propriedades comuns do proprio spring boot podem ser visualizadas pelo 
 
 https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 
+# Substituindo propriedades via linha de comando e variáveis de ambiente
+
+Com o .jar da aplicacao gerado e possivel usar o --propriedade=valor via linha de comando
+
+```
+java -jar algafood-api.jar --server.port=8082
+```
+
+Outra forma e usando variavel de ambiente:
+
+```
+export SERVER_PORT=8083
+java -jar algafood-api.jar
+```
