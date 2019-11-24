@@ -120,3 +120,10 @@ java -jar algafood-api.jar
 private String nomeDaPropriedade;
 ```
 
+# Acessando propriedades com @ConfigurationProperties
+
+Usado para agrupar propriedades do servidor em uma classe de configuracao.
+
+Voce define os atributos e gera os getters e setters juntamente com o anotacao de `@ConfigurationProperties`.
+
+Para usar voce injeta o beans em outra classe e usa as propriedades
