@@ -136,4 +136,16 @@ Criando arquivos `application-*.properties` voce pode definir varios profiles.
 
 Uma forma de usar e setando spring.profiles.active=prod no arquivo application.properites por exemplo.
 
+# Ativando o Spring Profile por linha de comando e variável de ambiente
+
+```
+java -jar target/algafood-api-0.0.1-SNAPSHOT.jar --spring.profiles.active=dev
+```
+
+ou:
+
+```
+export SPRING_PROFILES_ACTIVE=prod
+java -jar target/algafood-api-0.0.1-SNAPSHOT.jar
+```
 
