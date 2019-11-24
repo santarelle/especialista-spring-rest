@@ -60,3 +60,12 @@ Quando anotamos um Bean com @Qualifier estamos dando um apilido para este beans 
 - Desambiguacao de beans com anotacao customizada
 
 E possivel resolver criando uma anotacao que e anotada com @Qualifier e um @Retention do tipo RUNTIME.
+
+- Mudando o comportamento da aplicacao com Spring Profiles
+Quando usamos o profile o Spring inicializa somente os beans references aquele profile.
+
+No arquivo application.properties podemos usar multiplos profiles ao mesmo tempo. 
+
+Ex: prod,mysql,smtp,s3
+
+Ex: dev,h2,mailmock,filesystem
