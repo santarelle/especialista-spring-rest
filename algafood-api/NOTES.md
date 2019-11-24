@@ -69,3 +69,12 @@ No arquivo application.properties podemos usar multiplos profiles ao mesmo tempo
 Ex: prod,mysql,smtp,s3
 
 Ex: dev,h2,mailmock,filesystem
+
+- Criando metodos de callback do ciclo de vida dos beans
+
+O clico de vida do bean dentro do container tem as fases: inicializacao, usando o bean e destruicao do bean.
+
+Podemos usar metodos de callback quando o bean mudar de estado com anotacoes: 
+1. @PostConstruct - E executado apois o contrutor da classe
+2. @PreDestroy - E executado quando o bean vai ser destruido
+
