@@ -26,8 +26,8 @@ public class InclusaoCozinhaMain {
 		cozinha1 = cozinhaRepository.salvar(cozinha1);
 		cozinha2 = cozinhaRepository.salvar(cozinha2);
 		
-		System.out.printf("%d -%s\n", cozinha1.getId(), cozinha1.getNome());
-		System.out.printf("%d -%s\n", cozinha2.getId(), cozinha2.getNome());
+		System.out.printf("%d - %s\n", cozinha1.getId(), cozinha1.getNome());
+		System.out.printf("%d - %s\n", cozinha2.getId(), cozinha2.getNome());
 	}
 
 }
