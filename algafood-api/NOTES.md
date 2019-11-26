@@ -197,3 +197,6 @@ E uma implementacao da especificacao JPA.
 
 Hibernete e a mais usada mas tem o EclipseLink.
 
+# Conhecendo o padrão Aggregate do DDD
+
+https://martinfowler.com/bliki/DDD_Aggregate.html
