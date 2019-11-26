@@ -19,7 +19,7 @@ public class RestauranteRepositoryImpl implements RestauranteRepository {
 
 	@Override
 	public List<Restaurante> listar() {
-		return manager.createQuery("FROM Restaurate", Restaurante.class).getResultList();
+		return manager.createQuery("FROM Restaurante", Restaurante.class).getResultList();
 	}
 
 	@Override
