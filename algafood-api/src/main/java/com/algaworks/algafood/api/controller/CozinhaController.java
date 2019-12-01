@@ -59,7 +59,7 @@ public class CozinhaController {
 	@ResponseStatus(HttpStatus.CREATED)
 	@PostMapping
 	public Cozinha adicionar(@RequestBody Cozinha cozinha) {
-		return cozinhaRepository.salvar(cozinha);
+		return cadastroCozinha.salvar(cozinha);
 	}
 
 	@PutMapping("/{cozinhaId}")
