@@ -1,10 +1,10 @@
 package com.algaworks.algafood.infrastructure.repository;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import com.algaworks.algafood.domain.repository.FormaPagamentoRepository;
 
-@Component
+@Repository
 public class FormaPagamentoRepositoryImpl implements FormaPagamentoRepository {
 
 }

@@ -8,12 +8,12 @@ import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.repository.CozinhaRepository;
 
-@Component
+@Repository
 public class CozinhaRepositoryImpl implements CozinhaRepository {
 	
 	@PersistenceContext
@@ -23,6 +23,13 @@ public class CozinhaRepositoryImpl implements CozinhaRepository {
 	public List<Cozinha> listar() {
 		TypedQuery<Cozinha> query = manager.createQuery("FROM Cozinha", Cozinha.class);
 		return query.getResultList();
+	}
+	
+	@Override
+	public List<Cozinha> consultarPorNome(String nome) {
+		return manager.createQuery("FROM Cozinha WHERE nome = :nome", Cozinha.class)
+				.setParameter("nome", nome)
+				.getResultList();
 	}
 	
 	@Transactional
@@ -45,5 +52,7 @@ public class CozinhaRepositoryImpl implements CozinhaRepository {
 		}
 		manager.remove(cozinha);
 	}
+
+	
 
 }
