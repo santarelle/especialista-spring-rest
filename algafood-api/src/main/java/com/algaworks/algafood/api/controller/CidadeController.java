@@ -1,6 +1,7 @@
 package com.algaworks.algafood.api.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,49 +33,54 @@ public class CidadeController {
 
 	@GetMapping
 	public List<Cidade> listar() {
-		return cidadeRepository.listar();
+		return cidadeRepository.findAll();
 	}
 
 	@GetMapping("/{cidadeId}")
 	public ResponseEntity<Cidade> buscar(@PathVariable Long cidadeId) {
-		Cidade cidade = cidadeRepository.buscar(cidadeId);
-		if (cidade == null) {
+		Optional<Cidade> cidade = cidadeRepository.findById(cidadeId);
+		if (cidade.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		}
-		return ResponseEntity.ok(cidade);
+		return ResponseEntity.ok(cidade.get());
 	}
 
 	@PostMapping
-	public ResponseEntity<Cidade> cadastrar(@RequestBody Cidade cidade) {
-		cidade = cadastroCidade.salvar(cidade);
-		return ResponseEntity.status(HttpStatus.CREATED).body(cidade);
-	}
-
-	@PutMapping("/{cidadeId}")
-	public ResponseEntity<?> atualizar(@PathVariable Long cidadeId, @RequestBody Cidade cidade) {
+	public ResponseEntity<?> cadastrar(@RequestBody Cidade cidade) {
 		try {
-			Cidade cidadeAtual = cidadeRepository.buscar(cidadeId);
-			if (cidadeAtual == null) {
-				return ResponseEntity.notFound().build();
-			}
-			
-			BeanUtils.copyProperties(cidade, cidadeAtual, "id");
-			cidadeAtual = cadastroCidade.salvar(cidadeAtual);
-			return ResponseEntity.ok(cidadeAtual);
+			cidade = cadastroCidade.salvar(cidade);
+			return ResponseEntity.status(HttpStatus.CREATED).body(cidade);
 
 		} catch (EntidadeNaoEncontradaException e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
-	
+
+	@PutMapping("/{cidadeId}")
+	public ResponseEntity<?> atualizar(@PathVariable Long cidadeId, @RequestBody Cidade cidade) {
+		try {
+			Optional<Cidade> cidadeAtual = cidadeRepository.findById(cidadeId);
+			if (cidadeAtual.isEmpty()) {
+				return ResponseEntity.notFound().build();
+			}
+			
+			BeanUtils.copyProperties(cidade, cidadeAtual.get(), "id");
+			Cidade cidadeSalva = cadastroCidade.salvar(cidadeAtual.get());
+			return ResponseEntity.ok(cidadeSalva);
+
+		} catch (EntidadeNaoEncontradaException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+	}
+
 	@DeleteMapping("/{cidadeId}")
 	public ResponseEntity<?> remover(@PathVariable Long cidadeId) {
-		Cidade cidade = cidadeRepository.buscar(cidadeId);
-		if (cidade == null) {
+		Optional<Cidade> cidade = cidadeRepository.findById(cidadeId);
+		if (cidade.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		}
-		
-		cidadeRepository.remover(cidadeId);
+
+		cidadeRepository.deleteById(cidadeId);
 		return ResponseEntity.noContent().build();
 	}
 }
