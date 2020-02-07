@@ -13,25 +13,32 @@ import com.algaworks.algafood.domain.repository.EstadoRepository;
 @Service
 public class CadastroEstadoService {
 
-	@Autowired
-	private EstadoRepository estadoRepository;
+    @Autowired
+    private EstadoRepository estadoRepository;
 
-	public Estado salvar(Estado estado) {
-		return estadoRepository.save(estado);
-	}
+    public Estado salvar(Estado estado) {
+        return estadoRepository.save(estado);
+    }
 
-	public void excluir(Long estadoId) {
-		try {
-			estadoRepository.deleteById(estadoId);
-			
-		} catch (EmptyResultDataAccessException e) {
-			throw new EntidadeNaoEncontradaException(
-					String.format("Nao existe um cadastro de estado com codigo %d", estadoId));
+    public void excluir(Long estadoId) {
+        try {
+            estadoRepository.deleteById(estadoId);
 
-		} catch (DataIntegrityViolationException e) {
-			throw new EntidadeEmUsoException(
-					String.format("Estado de codigo %d nao pode ser removido, pois esta em uso", estadoId));
-		}
-	}
+        } catch (EmptyResultDataAccessException e) {
+            throw new EntidadeNaoEncontradaException(
+                    String.format("Nao existe um cadastro de estado com codigo %d", estadoId));
+
+        } catch (DataIntegrityViolationException e) {
+            throw new EntidadeEmUsoException(
+                    String.format("Estado de codigo %d nao pode ser removido, pois esta em uso", estadoId));
+        }
+    }
+
+    public Estado buscarPorId(Long estadoId) {
+        return estadoRepository.findById(estadoId)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException(
+                        String.format("Nao existe um cadastro de estado com codigo %d", estadoId))
+                );
+    }
 
 }
