@@ -36,9 +36,9 @@ public class EstadoController {
     }
 
     @PostMapping
-    public ResponseEntity<Estado> adicionar(@RequestBody Estado estado) {
-        estado = cadastroEstado.salvar(estado);
-        return ResponseEntity.status(HttpStatus.CREATED).body(estado);
+    @ResponseStatus(HttpStatus.CREATED)
+    public Estado adicionar(@RequestBody Estado estado) {
+        return cadastroEstado.salvar(estado);
     }
 
     @PutMapping("/{estadoId}")

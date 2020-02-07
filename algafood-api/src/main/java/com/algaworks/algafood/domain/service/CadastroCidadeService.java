@@ -23,14 +23,16 @@ public class CadastroCidadeService {
     @Autowired
     private EstadoRepository estadoRepository;
 
+    @Autowired
+    private CadastroEstadoService cadastroEstado;
+
     public Cidade salvar(Cidade cidade) {
         Long estadoId = cidade.getEstado().getId();
-        Optional<Estado> estado = estadoRepository.findById(estadoId);
-        if (estado.isEmpty()) {
-            throw new EntidadeNaoEncontradaException(
-                    String.format("Nao existe cadastro de estado com codigo %d", estadoId));
-        }
-        cidade.setEstado(estado.get());
+
+        Estado estado = cadastroEstado.buscarPorId(estadoId);
+
+        cidade.setEstado(estado);
+        
         return cidadeRepository.save(cidade);
     }
 
