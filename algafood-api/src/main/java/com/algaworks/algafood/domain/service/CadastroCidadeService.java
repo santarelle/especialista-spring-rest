@@ -1,18 +1,15 @@
 package com.algaworks.algafood.domain.service;
 
-import java.util.Optional;
-
+import com.algaworks.algafood.domain.exception.CidadeNaoEncontradoException;
 import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.stereotype.Service;
-
-import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.model.Cidade;
 import com.algaworks.algafood.domain.model.Estado;
 import com.algaworks.algafood.domain.repository.CidadeRepository;
 import com.algaworks.algafood.domain.repository.EstadoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.stereotype.Service;
 
 @Service
 public class CadastroCidadeService {
@@ -32,7 +29,7 @@ public class CadastroCidadeService {
         Estado estado = cadastroEstado.buscarPorId(estadoId);
 
         cidade.setEstado(estado);
-        
+
         return cidadeRepository.save(cidade);
     }
 
@@ -41,8 +38,7 @@ public class CadastroCidadeService {
             cidadeRepository.deleteById(cidadeId);
 
         } catch (EmptyResultDataAccessException e) {
-            throw new EntidadeNaoEncontradaException(
-                    String.format("Nao existe um cadastro de cidade com codigo %d", cidadeId));
+            throw new CidadeNaoEncontradoException(cidadeId);
 
         } catch (DataIntegrityViolationException e) {
             throw new EntidadeEmUsoException(
@@ -52,8 +48,6 @@ public class CadastroCidadeService {
 
     public Cidade buscarPorId(Long cidadeId) {
         return cidadeRepository.findById(cidadeId)
-                .orElseThrow(() -> new EntidadeNaoEncontradaException(
-                        String.format("Nao existe cadastro de cidade com codigo %d", cidadeId))
-                );
+                .orElseThrow(() -> new CidadeNaoEncontradoException(cidadeId));
     }
 }
