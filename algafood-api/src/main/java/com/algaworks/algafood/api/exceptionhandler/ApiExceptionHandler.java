@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.JsonMappingException.Reference;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.PropertyBindingException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.List;
@@ -46,9 +48,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         Throwable rootCause = ExceptionUtils.getRootCause(ex);
 
         if (rootCause instanceof InvalidFormatException) {
-            return handleInvalidFormatException((InvalidFormatException) rootCause, headers, status, request);
+            return handleInvalidFormat((InvalidFormatException) rootCause, headers, status, request);
         } else if (rootCause instanceof PropertyBindingException) {
-            return handlePropertyBindingException((PropertyBindingException) rootCause, headers, status, request);
+            return handlePropertyBinding((PropertyBindingException) rootCause, headers, status, request);
         }
 
         Problem problem = createProblemBuilder(
@@ -60,7 +62,52 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
     }
 
-    private ResponseEntity<Object> handlePropertyBindingException(PropertyBindingException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    @ExceptionHandler(EntidadeNaoEncontradaException.class)
+    public ResponseEntity<?> tratarEntidadeNaoEncontrada(EntidadeNaoEncontradaException ex, WebRequest request) {
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        Problem problem = createProblemBuilder(
+                status,
+                ProblemType.ENTIDADE_NAO_ENCONTRADA,
+                ex.getMessage())
+                .build();
+
+        return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+    }
+
+    @ExceptionHandler(NegocioException.class)
+    public ResponseEntity<?> tratarNegocio(NegocioException ex, WebRequest request) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        Problem problem = createProblemBuilder(
+                status,
+                ProblemType.ERRO_NEGOCIO,
+                ex.getMessage()).build();
+
+        return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+    }
+
+    @ExceptionHandler(EntidadeEmUsoException.class)
+    public ResponseEntity<?> tratarEntidadeEmUso(EntidadeEmUsoException ex, WebRequest request) {
+        HttpStatus status = HttpStatus.CONFLICT;
+        Problem problem = createProblemBuilder(
+                status,
+                ProblemType.ENTIDADE_EM_USO,
+                ex.getMessage())
+                .build();
+
+        return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+
+        if (ex instanceof MethodArgumentTypeMismatchException) {
+            return handleMethodArgumentTypeMismatch((MethodArgumentTypeMismatchException) ex, headers, status, request);
+        }
+
+        return super.handleTypeMismatch(ex, headers, status, request);
+    }
+
+    private ResponseEntity<Object> handlePropertyBinding(PropertyBindingException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
 
         String path = joinPath(ex.getPath());
 
@@ -75,7 +122,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, problem, headers, status, request);
     }
 
-    private ResponseEntity<Object> handleInvalidFormatException(InvalidFormatException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    private ResponseEntity<Object> handleInvalidFormat(InvalidFormatException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
 
         String path = joinPath(ex.getPath());
 
@@ -91,39 +138,18 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, problem, headers, status, request);
     }
 
-    @ExceptionHandler(EntidadeNaoEncontradaException.class)
-    public ResponseEntity<?> tratarEntidadeNaoEncontradaException(EntidadeNaoEncontradaException ex, WebRequest request) {
-        HttpStatus status = HttpStatus.NOT_FOUND;
-        Problem problem = createProblemBuilder(
-                status,
-                ProblemType.ENTIDADE_NAO_ENCONTRADA,
-                ex.getMessage())
-                .build();
+    private ResponseEntity<Object> handleMethodArgumentTypeMismatch(
+            MethodArgumentTypeMismatchException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
 
-        return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
-    }
+        ProblemType problemType = ProblemType.PARAMETRO_INVALIDO;
 
-    @ExceptionHandler(NegocioException.class)
-    public ResponseEntity<?> tratarNegocioException(NegocioException ex, WebRequest request) {
-        HttpStatus status = HttpStatus.BAD_REQUEST;
-        Problem problem = createProblemBuilder(
-                status,
-                ProblemType.ERRO_NEGOCIO,
-                ex.getMessage()).build();
+        String detail = String.format("O parâmetro de URL '%s' recebeu o valor '%s', "
+                        + "que é de um tipo inválido. Corrija e informe um valor compatível com o tipo %s.",
+                ex.getName(), ex.getValue(), ex.getRequiredType().getSimpleName());
 
-        return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
-    }
+        Problem problem = createProblemBuilder(status, problemType, detail).build();
 
-    @ExceptionHandler(EntidadeEmUsoException.class)
-    public ResponseEntity<?> tratarEntidadeEmUsoException(EntidadeEmUsoException ex, WebRequest request) {
-        HttpStatus status = HttpStatus.CONFLICT;
-        Problem problem = createProblemBuilder(
-                status,
-                ProblemType.ENTIDADE_EM_USO,
-                ex.getMessage())
-                .build();
-
-        return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+        return handleExceptionInternal(ex, problem, headers, status, request);
     }
 
     private Problem.ProblemBuilder createProblemBuilder(HttpStatus status, ProblemType problemType, String detail) {
