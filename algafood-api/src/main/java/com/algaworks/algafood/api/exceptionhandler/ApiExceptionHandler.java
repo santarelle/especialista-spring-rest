@@ -25,6 +25,10 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
+    public static final String MSG_INTERNAL_ERROR = "Ocorreu um erro interno inesperado no sistema. "
+            + "Tente novamente e se o problema persistir, entre em contato "
+            + "com o administrador do sistema.";
+
     @Override
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
         if (body == null) {
@@ -46,9 +50,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleUncaught(Exception ex, WebRequest request) {
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
         ProblemType problemType = ProblemType.ERRO_DE_SISTEMA;
-        String detail = "Ocorreu um erro interno inesperado no sistema. "
-                + "Tente novamente e se o problema persistir, entre em contato "
-                + "com o administrador do sistema.";
+        String detail = MSG_INTERNAL_ERROR;
 
         // Importante colocar o printStackTrace (pelo menos por enquanto, que não estamos
         // fazendo logging) para mostrar a stacktrace no console
@@ -86,6 +88,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 status,
                 ProblemType.MENSAGEM_INCOMPREENSIVEL,
                 "O corpo da requisição é inválido. Verifique erro de sintaxe")
+                .uiMessage(MSG_INTERNAL_ERROR)
                 .build();
 
         return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
@@ -146,6 +149,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 status,
                 ProblemType.MENSAGEM_INCOMPREENSIVEL,
                 detail)
+                .uiMessage(MSG_INTERNAL_ERROR)
                 .build();
 
         return handleExceptionInternal(ex, problem, headers, status, request);
@@ -162,6 +166,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 status,
                 ProblemType.MENSAGEM_INCOMPREENSIVEL,
                 detail)
+                .uiMessage(MSG_INTERNAL_ERROR)
                 .build();
 
         return handleExceptionInternal(ex, problem, headers, status, request);
