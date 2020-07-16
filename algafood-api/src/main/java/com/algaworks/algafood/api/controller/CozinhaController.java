@@ -22,6 +22,8 @@ import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.repository.CozinhaRepository;
 import com.algaworks.algafood.domain.service.CadastroCozinhaService;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/cozinhas")
 public class CozinhaController {
@@ -44,7 +46,7 @@ public class CozinhaController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public Cozinha adicionar(@RequestBody Cozinha cozinha) {
+    public Cozinha adicionar(@RequestBody @Valid Cozinha cozinha) {
         return cadastroCozinha.salvar(cozinha);
     }
 

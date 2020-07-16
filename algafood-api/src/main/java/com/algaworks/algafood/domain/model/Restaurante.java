@@ -10,6 +10,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
+import javax.validation.groups.ConvertGroup;
+import javax.validation.groups.Default;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -24,20 +26,21 @@ public class Restaurante {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotEmpty(groups = Group.CadastroRestaurante.class)
-    @NotNull(groups = Group.CadastroRestaurante.class)
-    @NotBlank(groups = Group.CadastroRestaurante.class)
+    @NotEmpty
+    @NotNull
+    @NotBlank
     @Column(name = "nome", nullable = false)
     private String nome;
 
-    @DecimalMin(value = "0", groups = Group.CadastroRestaurante.class)
-    @PositiveOrZero(groups = Group.CadastroRestaurante.class)
+    @DecimalMin(value = "0", groups = Group.CozinhaId.class)
+    @PositiveOrZero
     @Column(name = "taxa_frete", nullable = false)
     private BigDecimal taxaFrete;
 
     // @JsonIgnore
     @Valid
-    @NotNull(groups = Group.CadastroRestaurante.class)
+    @ConvertGroup(from = Default.class, to = Group.CozinhaId.class)
+    @NotNull
     @ManyToOne // (fetch = FetchType.LAZY)
     @JoinColumn(name = "cozinha_id", nullable = false)
     private Cozinha cozinha;
