@@ -1,6 +1,6 @@
 package com.algaworks.algafood.domain.model;
 
-import com.algaworks.algafood.Group;
+import com.algaworks.algafood.core.validation.Groups;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -32,14 +32,14 @@ public class Restaurante {
     @Column(name = "nome", nullable = false)
     private String nome;
 
-    @DecimalMin(value = "0", groups = Group.CozinhaId.class)
+    @DecimalMin(value = "0", groups = Groups.CozinhaId.class)
     @PositiveOrZero
     @Column(name = "taxa_frete", nullable = false)
     private BigDecimal taxaFrete;
 
     // @JsonIgnore
     @Valid
-    @ConvertGroup(from = Default.class, to = Group.CozinhaId.class)
+    @ConvertGroup(from = Default.class, to = Groups.CozinhaId.class)
     @NotNull
     @ManyToOne // (fetch = FetchType.LAZY)
     @JoinColumn(name = "cozinha_id", nullable = false)

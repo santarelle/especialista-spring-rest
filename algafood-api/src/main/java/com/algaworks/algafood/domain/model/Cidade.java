@@ -1,6 +1,6 @@
 package com.algaworks.algafood.domain.model;
 
-import com.algaworks.algafood.Group;
+import com.algaworks.algafood.core.validation.Groups;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -25,7 +25,7 @@ public class Cidade {
     private String nome;
 
     @Valid
-    @ConvertGroup(from = Default.class, to = Group.EstadoId.class)
+    @ConvertGroup(from = Default.class, to = Groups.EstadoId.class)
     @ManyToOne
     private Estado estado;
 }
