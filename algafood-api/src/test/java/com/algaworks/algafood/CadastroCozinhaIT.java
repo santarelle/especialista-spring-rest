@@ -3,10 +3,11 @@ package com.algaworks.algafood;
 import com.algaworks.algafood.domain.exception.CozinhaNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafood.domain.model.Cozinha;
+import com.algaworks.algafood.domain.repository.CozinhaRepository;
 import com.algaworks.algafood.domain.service.CadastroCozinhaService;
+import com.algaworks.algafood.util.DatabaseCleaner;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import org.flywaydb.core.Flyway;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,7 +36,10 @@ public class CadastroCozinhaIT {
     private CadastroCozinhaService cadastroCozinhaService;
 
     @Autowired
-    private Flyway flyway;
+    private DatabaseCleaner databaseCleaner;
+
+    @Autowired
+    private CozinhaRepository cozinhaRepository;
 
     @Before
     public void setUp() {
@@ -43,7 +47,8 @@ public class CadastroCozinhaIT {
         RestAssured.port = port;
         RestAssured.basePath = "/cozinhas";
 
-        flyway.migrate();
+        databaseCleaner.clearTables();
+        prepareDatabase();
     }
 
     @Test
@@ -64,11 +69,6 @@ public class CadastroCozinhaIT {
         newCozinha = cadastroCozinhaService.salvar(newCozinha);
     }
 
-    @Test(expected = EntidadeEmUsoException.class)
-    public void shouldFail_WhenDeleteCozinhaUsed() {
-        cadastroCozinhaService.excluir(1L);
-    }
-
     @Test(expected = CozinhaNaoEncontradaException.class)
     public void shouldFail_WhenDeleteCozinhaNonexistent() {
         cadastroCozinhaService.excluir(0L);
@@ -85,13 +85,13 @@ public class CadastroCozinhaIT {
     }
 
     @Test
-    public void shouldHave4Cozinhas_WhenFindCozinhas() {
+    public void shouldHave2Cozinhas_WhenFindCozinhas() {
         given()
                 .accept(ContentType.JSON)
         .when()
             .get()
         .then()
-            .body("", Matchers.hasSize(4))
+            .body("", Matchers.hasSize(2))
             .body("nome", Matchers.hasItems("Indiana", "Tailandesa"));
     }
 
@@ -107,4 +107,13 @@ public class CadastroCozinhaIT {
             .statusCode(HttpStatus.CREATED.value());
     }
 
+    private void prepareDatabase() {
+        Cozinha cozinha1 = new Cozinha();
+        cozinha1.setNome("Tailandesa");
+        cozinhaRepository.save(cozinha1);
+
+        Cozinha cozinha2 = new Cozinha();
+        cozinha2.setNome("Indiana");
+        cozinhaRepository.save(cozinha2);
+    }
 }
