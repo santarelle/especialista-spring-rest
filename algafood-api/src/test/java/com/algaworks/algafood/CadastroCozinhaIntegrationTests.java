@@ -2,6 +2,8 @@ package com.algaworks.algafood;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.algaworks.algafood.domain.exception.CozinhaNaoEncontradaException;
+import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.service.CadastroCozinhaService;
 import org.junit.Test;
@@ -20,7 +22,7 @@ public class CadastroCozinhaIntegrationTests {
 	private CadastroCozinhaService cadastroCozinhaService;
 
 	@Test
-	public void shouldSuccessWhenSaveCozinhaWithValidName() {
+	public void shouldSuccess_WhenSaveCozinhaWithValidName() {
 		Cozinha newCozinha = new Cozinha();
 		newCozinha.setNome("Chinesa");
 
@@ -32,9 +34,19 @@ public class CadastroCozinhaIntegrationTests {
 	}
 
 	@Test(expected = ConstraintViolationException.class)
-	public void shouldFailWhenSaveCozinhaWithoutNome() {
+	public void shouldFail_WhenSaveCozinhaWithoutNome() {
 		var newCozinha = new Cozinha();
 		newCozinha = cadastroCozinhaService.salvar(newCozinha);
+	}
+
+	@Test(expected = EntidadeEmUsoException.class)
+	public void shouldFail_WhenDeleteCozinhaUsed() {
+		cadastroCozinhaService.excluir(1L);
+	}
+
+	@Test(expected = CozinhaNaoEncontradaException.class)
+	public void shouldFail_WhenDeleteCozinhaNonexistent() {
+		cadastroCozinhaService.excluir(0L);
 	}
 
 }
