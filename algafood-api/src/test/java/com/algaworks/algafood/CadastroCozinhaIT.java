@@ -7,6 +7,7 @@ import com.algaworks.algafood.domain.service.CadastroCozinhaService;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.hamcrest.Matchers;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,13 @@ public class CadastroCozinhaIT {
 
     @Autowired
     private CadastroCozinhaService cadastroCozinhaService;
+
+    @Before
+    public void setUp() {
+        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();;
+        RestAssured.port = port;
+        RestAssured.basePath = "/cozinhas";
+    }
 
     @Test
     public void shouldSuccess_WhenSaveCozinhaWithValidName() {
@@ -60,11 +68,7 @@ public class CadastroCozinhaIT {
 
     @Test
     public void shouldReturnStatusOK_WhenFindCozinhas() {
-        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
-
         given()
-            .basePath("/cozinhas")
-            .port(port)
             .accept(ContentType.JSON)
         .when()
             .get()
@@ -74,17 +78,13 @@ public class CadastroCozinhaIT {
 
     @Test
     public void shouldHave5Cozinhas_WhenFindCozinhas() {
-        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
-
         given()
-                .basePath("/cozinhas")
-                .port(port)
                 .accept(ContentType.JSON)
-                .when()
-                .get()
-                .then()
-                    .body("", Matchers.hasSize(5))
-                    .body("nome", Matchers.hasItems("Indiana", "Tailandesa"));
+        .when()
+            .get()
+        .then()
+            .body("", Matchers.hasSize(5))
+            .body("nome", Matchers.hasItems("Indiana", "Tailandesa"));
     }
 
 }
