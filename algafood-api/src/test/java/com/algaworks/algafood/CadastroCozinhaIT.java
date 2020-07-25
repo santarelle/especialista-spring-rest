@@ -6,6 +6,7 @@ import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.service.CadastroCozinhaService;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import org.flywaydb.core.Flyway;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,11 +32,16 @@ public class CadastroCozinhaIT {
     @Autowired
     private CadastroCozinhaService cadastroCozinhaService;
 
+    @Autowired
+    private Flyway flyway;
+
     @Before
     public void setUp() {
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();;
         RestAssured.port = port;
         RestAssured.basePath = "/cozinhas";
+
+        flyway.migrate();
     }
 
     @Test
@@ -77,14 +83,26 @@ public class CadastroCozinhaIT {
     }
 
     @Test
-    public void shouldHave5Cozinhas_WhenFindCozinhas() {
+    public void shouldHave4Cozinhas_WhenFindCozinhas() {
         given()
                 .accept(ContentType.JSON)
         .when()
             .get()
         .then()
-            .body("", Matchers.hasSize(5))
+            .body("", Matchers.hasSize(4))
             .body("nome", Matchers.hasItems("Indiana", "Tailandesa"));
+    }
+
+    @Test
+    public void shouldReturnStatusCREATED_WhenCreateCozinha() {
+        given()
+            .body("{ \"nome\": \"Polonesa\" }")
+            .contentType(ContentType.JSON)
+            .accept(ContentType.JSON)
+        .when()
+            .post()
+        .then()
+            .statusCode(HttpStatus.CREATED.value());
     }
 
 }
