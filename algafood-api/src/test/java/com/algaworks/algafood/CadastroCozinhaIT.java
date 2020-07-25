@@ -6,6 +6,7 @@ import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.service.CadastroCozinhaService;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +70,21 @@ public class CadastroCozinhaIT {
             .get()
         .then()
             .statusCode(HttpStatus.OK.value());
+    }
+
+    @Test
+    public void shouldHave5Cozinhas_WhenFindCozinhas() {
+        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+
+        given()
+                .basePath("/cozinhas")
+                .port(port)
+                .accept(ContentType.JSON)
+                .when()
+                .get()
+                .then()
+                    .body("", Matchers.hasSize(5))
+                    .body("nome", Matchers.hasItems("Indiana", "Tailandesa"));
     }
 
 }
