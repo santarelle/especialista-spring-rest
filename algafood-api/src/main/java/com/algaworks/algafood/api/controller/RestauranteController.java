@@ -69,9 +69,6 @@ public class RestauranteController {
     public RestauranteModel atualizar(@PathVariable Long restauranteId,
             @RequestBody @Valid RestauranteInput restauranteInput) {
         try {
-            // Restaurante restaurante =
-            // restauranteInputDisassembler.toDomainObject(restauranteInput);
-
             Restaurante restauranteAtual = cadastroRestaurante.buscarPorId(restauranteId);
 
             restauranteInputDisassembler.copyToDomainObject(restauranteInput, restauranteAtual);
