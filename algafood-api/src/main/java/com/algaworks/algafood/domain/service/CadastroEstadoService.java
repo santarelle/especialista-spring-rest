@@ -1,9 +1,12 @@
 package com.algaworks.algafood.domain.service;
 
+import javax.transaction.Transactional;
+
 import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
 import com.algaworks.algafood.domain.exception.EstadoNaoEncontradoException;
 import com.algaworks.algafood.domain.model.Estado;
 import com.algaworks.algafood.domain.repository.EstadoRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -19,9 +22,11 @@ public class CadastroEstadoService {
         return estadoRepository.save(estado);
     }
 
+    @Transactional
     public void excluir(Long estadoId) {
         try {
             estadoRepository.deleteById(estadoId);
+            estadoRepository.flush();
 
         } catch (EmptyResultDataAccessException e) {
             throw new EstadoNaoEncontradoException(estadoId);
@@ -33,8 +38,7 @@ public class CadastroEstadoService {
     }
 
     public Estado buscarPorId(Long estadoId) {
-        return estadoRepository.findById(estadoId)
-                .orElseThrow(() -> new EstadoNaoEncontradoException(estadoId));
+        return estadoRepository.findById(estadoId).orElseThrow(() -> new EstadoNaoEncontradoException(estadoId));
     }
 
 }
