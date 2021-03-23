@@ -1,7 +1,6 @@
 package com.algaworks.algafood.core.modelmapper;
 
 import com.algaworks.algafood.api.model.EnderecoModel;
-import com.algaworks.algafood.api.model.EstadoModel;
 import com.algaworks.algafood.domain.model.Endereco;
 
 import org.modelmapper.ModelMapper;
