@@ -1,13 +1,15 @@
 package com.algaworks.algafood;
 
+import static io.restassured.RestAssured.given;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.algaworks.algafood.domain.exception.CozinhaNaoEncontradaException;
 import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.repository.CozinhaRepository;
 import com.algaworks.algafood.domain.service.CadastroCozinhaService;
 import com.algaworks.algafood.util.DatabaseCleaner;
 import com.algaworks.algafood.util.ResourceUtils;
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
+
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,14 +17,13 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.validation.ConstraintViolationException;
-
-import static io.restassured.RestAssured.given;
-import static org.assertj.core.api.Assertions.assertThat;
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -49,7 +50,7 @@ public class CadastroCozinhaIT {
 
     @Before
     public void setUp() {
-        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();;
+        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
         RestAssured.port = port;
         RestAssured.basePath = "/cozinhas";
 
@@ -71,7 +72,7 @@ public class CadastroCozinhaIT {
         assertThat(newCozinha.getNome()).isNotNull();
     }
 
-    @Test(expected = ConstraintViolationException.class)
+    @Test(expected = DataIntegrityViolationException.class)
     public void shouldFail_WhenSaveCozinhaWithoutNome() {
         var newCozinha = new Cozinha();
         newCozinha = cadastroCozinhaService.salvar(newCozinha);
@@ -84,56 +85,30 @@ public class CadastroCozinhaIT {
 
     @Test
     public void shouldReturnStatusOK_WhenFindCozinhas() {
-        given()
-            .accept(ContentType.JSON)
-        .when()
-            .get()
-        .then()
-            .statusCode(HttpStatus.OK.value());
+        given().accept(ContentType.JSON).when().get().then().statusCode(HttpStatus.OK.value());
     }
 
     @Test
     public void shouldReturnQuantityCozinhasRegisteredCorrectly_WhenFindCozinhas() {
-        given()
-                .accept(ContentType.JSON)
-        .when()
-            .get()
-        .then()
-            .body("", Matchers.hasSize(quantityCozinhasRegistered));
+        given().accept(ContentType.JSON).when().get().then().body("", Matchers.hasSize(quantityCozinhasRegistered));
     }
 
     @Test
     public void shouldReturnStatusCREATED_WhenCreateCozinha() {
-        given()
-            .body(jsonCozinhaChinesa)
-            .contentType(ContentType.JSON)
-            .accept(ContentType.JSON)
-        .when()
-            .post()
-        .then()
-            .statusCode(HttpStatus.CREATED.value());
+        given().body(jsonCozinhaChinesa).contentType(ContentType.JSON).accept(ContentType.JSON).when().post().then()
+                .statusCode(HttpStatus.CREATED.value());
     }
 
     @Test
     public void shouldResponseStatusOKAndNomeIndiana_WhenFindCozinhaWithId2() {
-        given()
-            .pathParam("cozinhaId", cozinhaIndiana.getId())
-            .accept(ContentType.JSON)
-        .when()
-            .get("/{cozinhaId}")
-        .then()
-            .statusCode(HttpStatus.OK.value())
-            .body("nome", Matchers.equalTo(cozinhaIndiana.getNome()));
+        given().pathParam("cozinhaId", cozinhaIndiana.getId()).accept(ContentType.JSON).when().get("/{cozinhaId}")
+                .then().statusCode(HttpStatus.OK.value()).body("nome", Matchers.equalTo(cozinhaIndiana.getNome()));
     }
 
     @Test
     public void shouldResponseStatusNotFound_WhenFindCozinhaNonexistent() {
-        given()
-            .pathParam("cozinhaId", COZINHA_ID_NONEXISTENT)
-        .when()
-            .get("/{cozinhaId}")
-        .then()
-            .statusCode(HttpStatus.NOT_FOUND.value());
+        given().pathParam("cozinhaId", COZINHA_ID_NONEXISTENT).when().get("/{cozinhaId}").then()
+                .statusCode(HttpStatus.NOT_FOUND.value());
     }
 
     private void prepareDatabase() {

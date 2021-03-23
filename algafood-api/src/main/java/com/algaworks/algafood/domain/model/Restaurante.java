@@ -37,13 +37,16 @@ public class Restaurante {
     @Valid
     @ConvertGroup(from = Default.class, to = Groups.CozinhaId.class)
     @NotNull
-    @ManyToOne // (fetch = FetchType.LAZY)
+    @ManyToOne // @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cozinha_id", nullable = false)
     private Cozinha cozinha;
 
     @JsonIgnore
     @Embedded
     private Endereco endereco;
+
+    @Column(nullable = false)
+    private Boolean ativo = Boolean.TRUE;
 
     @JsonIgnore
     @CreationTimestamp
@@ -63,5 +66,13 @@ public class Restaurante {
     @JsonIgnore
     @OneToMany(mappedBy = "restaurante", fetch = FetchType.LAZY)
     private List<Produto> produtos = new ArrayList<>();
+
+    public void ativar() {
+        setAtivo(true);
+    }
+
+    public void inativar() {
+        setAtivo(false);
+    }
 
 }
