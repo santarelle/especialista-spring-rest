@@ -1,8 +1,11 @@
 package com.algaworks.algafood.domain.service;
 
+import java.util.Optional;
+
 import javax.transaction.Transactional;
 
 import com.algaworks.algafood.domain.exception.NegocioException;
+import com.algaworks.algafood.domain.exception.UsuarioComEmailDuplicadoException;
 import com.algaworks.algafood.domain.exception.UsuarioNaoEncontradoException;
 import com.algaworks.algafood.domain.model.Usuario;
 import com.algaworks.algafood.domain.repository.UsuarioRepository;
@@ -18,6 +21,14 @@ public class CadastroUsuarioService {
 
     @Transactional
     public Usuario salvar(Usuario usuario) {
+        usuarioRepository.detach(usuario);
+
+        Optional<Usuario> usuarioPorEmail = usuarioRepository.findByEmail(usuario.getEmail());
+
+        if (usuarioPorEmail.isPresent() && !usuarioPorEmail.get().equals(usuario)) {
+            throw new UsuarioComEmailDuplicadoException(usuario.getEmail());
+        }
+
         return usuarioRepository.save(usuario);
     }
 
