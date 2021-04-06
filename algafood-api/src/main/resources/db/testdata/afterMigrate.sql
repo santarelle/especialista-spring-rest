@@ -53,7 +53,11 @@ INSERT INTO restaurante_forma_pagamento (restaurante_id, forma_pagamento_id) VAL
 INSERT INTO restaurante_forma_pagamento (restaurante_id, forma_pagamento_id) VALUES (3, 2);
 INSERT INTO restaurante_forma_pagamento (restaurante_id, forma_pagamento_id) VALUES (3, 3);
 
+INSERT INTO permissao (nome, descricao) values ('CONSULTAR_COZINHAS','Permite consultar sozinhas'), ('EDITAR_COZINHAS','Permite editar cozinhas');
+
 insert into grupo (nome) values ('Gerente'), ('Vendedor'), ('Secretária'), ('Cadastrador');
+
+insert into grupo_permissao (grupo_id, permissao_id) values (1, 1), (1, 2), (2, 1), (2, 2), (3, 1); 
 
 insert into usuario (id, nome, email, senha, data_cadastro) values
 (1, 'João da Silva', 'joao.ger@algafood.com', '123', utc_timestamp),
