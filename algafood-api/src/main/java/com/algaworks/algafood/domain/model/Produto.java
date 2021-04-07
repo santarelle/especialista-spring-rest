@@ -1,14 +1,11 @@
 package com.algaworks.algafood.domain.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.math.BigDecimal;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -19,10 +16,18 @@ public class Produto {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
+	@Column(nullable = false)
 	private String nome;
+
+	@Column(nullable = false)
 	private String descricao;
-	private String contentType;
-	private String tamanho;
+
+	@Column(nullable = false)
+	private BigDecimal preco;
+
+	@Column(nullable = false)
+	private Boolean ativo;
 
 	@ManyToOne
 	@JoinColumn(nullable = false)
