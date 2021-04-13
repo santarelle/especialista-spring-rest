@@ -28,12 +28,16 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .secret(passwordEncoder.encode("web123"))
                 .authorizedGrantTypes("password")
                 .scopes("write", "read")
-                .accessTokenValiditySeconds(6 * 60 * 60);
+                .accessTokenValiditySeconds(6 * 60 * 60)
+                .and()
+                .withClient("check-token")
+                .secret(passwordEncoder.encode("check123"));
     }
 
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-        security.checkTokenAccess("isAuthenticated()");
+//        security.checkTokenAccess("isAuthenticated()");
+        security.checkTokenAccess("permitAll()");
     }
 
     @Override

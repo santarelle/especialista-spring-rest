@@ -1,31 +1,27 @@
 package com.algaworks.algafood;
 
-import static io.restassured.RestAssured.given;
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.algaworks.algafood.domain.exception.CozinhaNaoEncontradaException;
 import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.repository.CozinhaRepository;
 import com.algaworks.algafood.domain.service.CadastroCozinhaService;
 import com.algaworks.algafood.util.DatabaseCleaner;
 import com.algaworks.algafood.util.ResourceUtils;
-
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import org.hamcrest.Matchers;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
 
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
+import static io.restassured.RestAssured.given;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("/application-test.properties")
 public class CadastroCozinhaIT {
@@ -48,7 +44,7 @@ public class CadastroCozinhaIT {
     private Cozinha cozinhaIndiana;
     private String jsonCozinhaChinesa;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
         RestAssured.port = port;
@@ -72,15 +68,16 @@ public class CadastroCozinhaIT {
         assertThat(newCozinha.getNome()).isNotNull();
     }
 
-    @Test(expected = DataIntegrityViolationException.class)
+    @Test
     public void shouldFail_WhenSaveCozinhaWithoutNome() {
         var newCozinha = new Cozinha();
-        newCozinha = cadastroCozinhaService.salvar(newCozinha);
+        assertThrows(DataIntegrityViolationException.class, () -> cadastroCozinhaService.salvar(newCozinha));
     }
 
-    @Test(expected = CozinhaNaoEncontradaException.class)
+
+    @Test
     public void shouldFail_WhenDeleteCozinhaNonexistent() {
-        cadastroCozinhaService.excluir((long) COZINHA_ID_NONEXISTENT);
+        assertThrows(CozinhaNaoEncontradaException.class, () -> cadastroCozinhaService.excluir((long) COZINHA_ID_NONEXISTENT));
     }
 
     @Test
