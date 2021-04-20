@@ -39,8 +39,14 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                     .withClient("algafood-analytics")
                     .secret(passwordEncoder.encode("food123"))
                     .authorizedGrantTypes("authorization_code")
-                    .scopes("write", "red")
+                    .scopes("write", "read")
                     .redirectUris("http://aplicacao-algafood")
+
+                .and()
+                    .withClient("algafood-webadmin")
+                    .authorizedGrantTypes("implicit")
+                    .scopes("write","read")
+                    .redirectUris("http://aplicacao-cliente")
 
                 .and()
                     .withClient("faturamento")
