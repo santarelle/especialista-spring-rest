@@ -16,6 +16,7 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                .cors().and()
                 .oauth2ResourceServer().opaqueToken();
     }
 }
