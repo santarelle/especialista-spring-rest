@@ -36,6 +36,13 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                     .refreshTokenValiditySeconds(60 * 24 * 60 * 60) // 60 days (60 days has 24 hr has 60 min has 60 sec)
 
                 .and()
+                    .withClient("algafood-analytics")
+                    .secret(passwordEncoder.encode("food123"))
+                    .authorizedGrantTypes("authorization_code")
+                    .scopes("write", "red")
+                    .redirectUris("http://aplicacao-algafood")
+
+                .and()
                     .withClient("faturamento")
                     .secret(passwordEncoder.encode("faturamento123"))
                     .authorizedGrantTypes("client_credentials")
