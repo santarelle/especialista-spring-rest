@@ -200,3 +200,10 @@ Hibernete e a mais usada mas tem o EclipseLink.
 # Conhecendo o padrão Aggregate do DDD
 
 https://martinfowler.com/bliki/DDD_Aggregate.html
+
+# URL para authorization code
+
+http://auth.algafood.local:8081/oauth/authorize?response_type=code&client_id=algafood-analytics&state=abc&redirect_uri=http://aplicacao-algafood
+
+
+http://auth.algafood.local:8081/oauth/authorize?response_type=token&client_id=algafood-webadmin&state=abc&redirect_uri=http://aplicacao-cliente

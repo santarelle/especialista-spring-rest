@@ -16,14 +16,7 @@ import com.algaworks.algafood.domain.service.CadastroUsuarioService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/usuarios")
@@ -48,6 +41,11 @@ public class UsuarioController {
         return usuarioModelAssembler.toCollectionModel(todasUsuarios);
     }
 
+    @GetMapping(params = { "nome" })
+    public List<Usuario> findUsersByNome(@RequestParam("nome") String nome) {
+        return usuarioRepository.findByNomeIgnoreCaseContaining(nome);
+    }
+
     @GetMapping("/{usuarioId}")
     public UsuarioModel buscar(@PathVariable Long usuarioId) {
         Usuario usuario = cadastroUsuario.buscarOuFalhar(usuarioId);
@@ -55,7 +53,7 @@ public class UsuarioController {
         return usuarioModelAssembler.toModel(usuario);
     }
 
-    @PostMapping
+    @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public UsuarioModel adicionar(@RequestBody @Valid UsuarioComSenhaInput usuarioInput) {
         Usuario usuario = usuarioInputDisassembler.toDomainObject(usuarioInput);
