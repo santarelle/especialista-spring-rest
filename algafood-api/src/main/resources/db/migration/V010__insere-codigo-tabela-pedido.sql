@@ -1,0 +1,1 @@
+ALTER TABLE pedido ADD codigo varchar(255) NOT NULL;
