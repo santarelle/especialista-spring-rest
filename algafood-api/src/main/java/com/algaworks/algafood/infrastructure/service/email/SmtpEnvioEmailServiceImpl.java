@@ -9,6 +9,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
+import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 public class SmtpEnvioEmailServiceImpl implements EnvioEmailService {
@@ -17,7 +18,7 @@ public class SmtpEnvioEmailServiceImpl implements EnvioEmailService {
     private JavaMailSender javaMailSender;
 
     @Autowired
-    private EmailProperties emailProperties;
+    protected EmailProperties emailProperties;
 
     @Autowired
     private Configuration freeMarkerConfig;
@@ -25,20 +26,22 @@ public class SmtpEnvioEmailServiceImpl implements EnvioEmailService {
     @Override
     public void enviar(Mensagem message) {
         try {
-            String corpoMensagem = processarTemplate(message);
-
-            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-
-            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "UTF-8");
-            helper.setFrom(emailProperties.getRemetente());
-            helper.setTo(message.getDestinatarios().toArray(new String[0]));
-            helper.setSubject(message.getAssunto());
-            helper.setText(corpoMensagem, true);
-
+            MimeMessage mimeMessage = criarMimeMessage(message);
             javaMailSender.send(mimeMessage);
         } catch (Exception e) {
             throw new EmailException("Não foi possivel enviar e-mail", e);
         }
+    }
+
+    protected MimeMessage criarMimeMessage(Mensagem mensagem) throws MessagingException {
+        String corpoMensagem = processarTemplate(mensagem);
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "UTF-8");
+        helper.setFrom(emailProperties.getRemetente());
+        helper.setTo(mensagem.getDestinatarios().toArray(new String[0]));
+        helper.setSubject(mensagem.getAssunto());
+        helper.setText(corpoMensagem, true);
+        return mimeMessage;
     }
 
     public String processarTemplate(Mensagem message) {

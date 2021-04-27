@@ -17,9 +17,17 @@ public class EmailProperties {
     @NonNull
     private String remetente;
 
+    private SandBox sandBox = new SandBox();
+
     private Implementacao impl = Implementacao.MOCK;
 
     public enum Implementacao {
-        SMTP, MOCK
+        SMTP, MOCK, SANDBOX
+    }
+
+    @Getter
+    @Setter
+    public class SandBox {
+        private String destinatario;
     }
 }
